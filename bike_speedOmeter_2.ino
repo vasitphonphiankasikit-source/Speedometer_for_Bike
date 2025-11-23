@@ -4,10 +4,10 @@
 LiquidCrystal_I2C lcd(0x27,16,2);
 
 const int sensor_pin = 34;
-const int button_pin = 15;      
-const int thres_hold = 1200;
+const int button_pin = 15;// ปุ่ม reset
+const int thres_hold = 1200; 
 
-const float distance_meter = 1.40;
+const float distance_meter = 1.40; // ระยะทางที่ล้อหมุนไปได้ 1 รอบ ในหน่วยเมตร
 
 float distance_total = 0;
 float speed_kmh = 0;
@@ -44,7 +44,7 @@ void loop() {
   unsigned long now_ms = millis();
   int sensor_val = analogRead(sensor_pin);
   int state = (sensor_val > thres_hold) ? 1 : 0;
-
+  
   if (digitalRead(button_pin) == HIGH) {
     resetAll();
     delay(300);
@@ -81,12 +81,13 @@ void loop() {
     }
   } 
   else {
+    // ถ้ากรณีล้อหมุด ให้แสดงความเร็ว เป็น 0.0
     speed_kmh = 0;
     showDashboard();
   }
 
 }
-
+// ฟังก์ชั่น reset ทุกค่าให้เป็น 0
 void resetAll() {
   distance_total = 0;
   max_speed = 0;
@@ -98,7 +99,7 @@ void resetAll() {
   delay(700);
   lcd.clear();
 }
-
+// จอแสดงผล
 void showDashboard() {
 
   int minutes = total_run_time / 60;
